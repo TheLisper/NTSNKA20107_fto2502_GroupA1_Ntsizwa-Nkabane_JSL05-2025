@@ -145,8 +145,8 @@ export const initialTasks = [
     const status = document.getElementById("modal-status").value;
 
     if (!title) {
-      alert("Please fill out the field");
-      return;
+    alert("Please fill out the field");
+    return;
     }
 
     if (currentTaskId === null) {
@@ -167,7 +167,7 @@ export const initialTasks = [
         task.status = status;
       }
     }
-
+    // Add local storage
     localStorage.setItem("tasks", JSON.stringify(initialTasks));
     renderTasks(initialTasks);
     closeModal();
