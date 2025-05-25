@@ -89,7 +89,7 @@
     modal.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;">
       <h3>Task</h3>
-      <button id="close-modal" style="background:none;border:none;font-size:1.5rem;cursor:pointer;">&times;</button>
+      <button id="close-modal" style="background:red;border:none;font-size:1.5rem;cursor:pointer;">&times;</button>
     </div>
     <label>Title<input id="modal-title" style="width:100%;margin-top:4px;" /></label>
     <label>Description<textarea id="modal-desc" rows="3" style="width:100%;margin-top:4px;"></textarea></label>
@@ -140,7 +140,7 @@
     document.getElementById("modal-status").onchange = saveModal;
   }
 
-  // Function to save changges from modal back to the task list
+  // Function to save changes from modal back to the task list
   function saveModal() {
     if (currentTaskId === null) return;
     const task = initialTasks.find((t) => t.id === currentTaskId);
@@ -148,6 +148,10 @@
     task.title = document.getElementById("modal-title").value;
     task.description = document.getElementById("modal-desc").value;
     task.status = document.getElementById("modal-status").value;
+
+    // Save the updated tasks to local storage
+    localStorage.setItem("tasks",JSON.stringify(initialTasks));
+
     renderTasks(initialTasks);
     closeModal();
   }
@@ -161,4 +165,17 @@
 
   // Initial rendering of tasks when page loads
   renderTasks(initialTasks);
+
+  // Function that loads tast from local storage
+  function loadTasksFromLocalStorage(){
+    const storedTasks = JSON.parse(localStorage.getItem("tasks"));
+    if(storedTasks){
+      initialTasks.length = 0; // This removes existing array
+      initialTasks.push(...storedTasks); // This shows the stored tasks
+    }
+    renderTasks(initialTasks);
+  }
+  //  This gets called when the page loads
+  document.addEventListener("DOMContentLoaded",loadTasksFromLocalStorage);
+
 ;
