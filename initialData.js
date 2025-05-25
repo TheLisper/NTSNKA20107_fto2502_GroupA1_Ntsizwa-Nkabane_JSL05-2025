@@ -100,6 +100,9 @@
         <option value="done">done</option>
       </select>
     </label>
+    <button id="save-task-btn" style="background:#4CAF50;color:white;padding:10px;border:none;border-radius:5px;cursor:pointer;">
+        Save
+    </button>
   `;
 
     backdrop.appendChild(modal);
@@ -110,6 +113,7 @@
       if (e.target === backdrop) closeModal();
     });
     document.getElementById("close-modal").onclick = closeModal;
+    document.getElementById("save-task-btn").addEventListener("click",saveModal);
   }
 
   // Stores the id of the current task
@@ -145,14 +149,16 @@
     task.description = document.getElementById("modal-desc").value;
     task.status = document.getElementById("modal-status").value;
     renderTasks(initialTasks);
+    closeModal();
   }
 
-  // Funxtion to close the modal
+  // Function to close the modal
   function closeModal() {
     document.getElementById("modal-backdrop").style.display = "none";
     currentTaskId = null;
+    closeModal();
   }
 
   // Initial rendering of tasks when page loads
   renderTasks(initialTasks);
-});
+;
