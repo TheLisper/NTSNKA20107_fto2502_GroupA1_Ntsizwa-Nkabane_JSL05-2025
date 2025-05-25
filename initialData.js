@@ -1,4 +1,4 @@
- export const initialTasks = [
+export const initialTasks = [
   {
     id: 1,
     title: "Launch Epic Career 🚀",
@@ -41,9 +41,7 @@
   },
 ];
 
-
-
-  // A function to render tasks in correct columns
+ // A function to render tasks in correct columns
   function renderTasks(tasks) {
     // This makes sure task containers are empty before input
     document
@@ -142,16 +140,35 @@
 
   // Function to save changes from modal back to the task list
   function saveModal() {
-    if (currentTaskId === null) return;
-    const task = initialTasks.find((t) => t.id === currentTaskId);
-    if (!task) return;
-    task.title = document.getElementById("modal-title").value;
-    task.description = document.getElementById("modal-desc").value;
-    task.status = document.getElementById("modal-status").value;
+    const title = document.getElementById("modal-title").value.trim();
+    const description = document.getElementById("modal-desc").value;
+    const status = document.getElementById("modal-status").value;
 
-    // Save the updated tasks to local storage
-    localStorage.setItem("tasks",JSON.stringify(initialTasks));
+    if (!title) {
+      alert("Please fill out the field");
+      return;
+    }
 
+    if (currentTaskId === null) {
+      // Add new task
+      const newTask = {
+        id: initialTasks.length + 1,
+        title,
+        description,
+        status,
+      };
+      initialTasks.push(newTask);
+    } else {
+      // Edit existing task
+      const task = initialTasks.find((t) => t.id === currentTaskId);
+      if (task) {
+        task.title = title;
+        task.description = description;
+        task.status = status;
+      }
+    }
+
+    localStorage.setItem("tasks", JSON.stringify(initialTasks));
     renderTasks(initialTasks);
     closeModal();
   }
@@ -178,4 +195,13 @@
   //  This gets called when the page loads
   document.addEventListener("DOMContentLoaded",loadTasksFromLocalStorage);
 
-;
+document.getElementById("add-task-btn").addEventListener("click",()=>{
+  currentTaskId = null;
+  createModal();
+
+  // reset fieids for a new task
+  document.getElementById("modal-title").value="";
+  document.getElementById("modal-desc").value="";
+  document.getElementById("modal-status").value="todo";
+  document.getElementById("modal-backdrop").style.display="flex";
+});
